@@ -1,11 +1,23 @@
 <script lang="ts">
-  import EmojiSelector from 'svelte-emoji-selector';
+  import { createPopup } from '@picmo/popup-picker';
+  import { onMount } from 'svelte';
 
   let movies = "ian test";
+  let picker;
+  // TODO: pull out emoji picker to a separate component, will need to pass down the text area element
+  onMount(async() => {
+    const triggerButton = document.getElementById('emoji') as HTMLElement;
+    picker = createPopup({}, {
+      triggerElement: triggerButton,
+      referenceElement: triggerButton,
+      position: 'bottom-start'
+    });
+    picker.addEventListener('emoji:select', placeEmojiAtCursor);
+  });
   
   function placeEmojiAtCursor(event) {
     const textArea = document.getElementById('movies');
-    const emoji = event.detail;
+    const emoji = event.emoji;
     if (textArea.selectionStart || textArea.selectionStart == '0') {
         var startPos = textArea.selectionStart;
         var endPos = textArea.selectionEnd;
@@ -26,9 +38,8 @@
 <main>
   <textarea id='movies' bind:value={movies} rows={movies.split('\n').length + 5}, cols=70/>
   <br/>
-  <EmojiSelector on:emoji={placeEmojiAtCursor} />
-  <br/>
-  <button on:click={save}>💾</button>
+  <button id='emoji' on:click={() => picker.toggle()}>Emoji</button>
+  <button on:click={save}>Save</button>
 </main>
 
 <style>
@@ -44,5 +55,21 @@
 
   textarea {
     font-size: large;
+  }
+
+  button {
+    color: #fff;
+    background-color: #5865f2;
+    align-items: center;
+    justify-content: center;
+    min-height: 32px;
+    min-width: 100px;
+    margin: 4px 8px 4px 0;
+    padding: 2px 16px;
+    border: 0;
+    border-radius: 3px;
+    box-sizing: border-box;
+    cursor: pointer;
+    transition: background-color .15s ease,color .15s ease;
   }
 </style>

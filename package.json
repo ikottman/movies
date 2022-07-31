@@ -20,6 +20,7 @@
     "vite": "^3.0.4"
   },
   "dependencies": {
-    "svelte-emoji-selector": "^1.0.1"
+    "@picmo/popup-picker": "^5.4.0",
+    "picmo": "^5.4.0"
   }
 }
