@@ -1,22 +1,28 @@
 <script lang="ts">
-  import data from '@emoji-mart/data'
-  import { init } from 'emoji-mart';
+  import EmojiSelector from 'svelte-emoji-selector';
 
-  init({ data })
-  const movies = [{
-    "title": "Pacific Rim",
-    "giggle": "carrie",
-    "emojis": "robot_face"
-  }]
+  let movie = '';
+  function onEmoji(event) {
+    movie += event.detail;
+  }
+
+  let movies = [];
+
+  function save() {
+    movies = [...movies, movie];
+    movie = '';
+  }
 </script>
 
 <main>
   <ul>
     {#each movies as movie}
-      <li>{movie.title} | {movie.giggle} | <em-emoji id={movie.emojis} fallback={movie.emojis}/></li>
+      <li>{movie}</li>
     {/each}
   </ul>
-  
+  <input bind:value={movie} type="text"/>
+  <EmojiSelector on:emoji={onEmoji} />
+  <button on:click={save}>💾</button>
 </main>
 
 <style>
