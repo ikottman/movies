@@ -7,7 +7,9 @@
   // TODO: pull out emoji picker to a separate component, will need to pass down the text area element
   onMount(async() => {
     const triggerButton = document.getElementById('emoji') as HTMLElement;
-    picker = createPopup({}, {
+    picker = createPopup({
+      showVariants: false,
+    }, {
       triggerElement: triggerButton,
       referenceElement: triggerButton,
       position: 'bottom-start'
@@ -36,7 +38,7 @@
 </script>
 
 <main>
-  <textarea id='movies' bind:value={movies} rows={movies.split('\n').length + 5}, cols=70/>
+  <textarea id='movies' bind:value={movies} rows={movies.split('\n').length + 5}, cols=90/>
   <br/>
   <button id='emoji' on:click={() => picker.toggle()}>Emoji</button>
   <button on:click={save}>Save</button>
@@ -45,6 +47,7 @@
 <style>
   :root {
     font-family: 'Nunito Sans', sans-serif;
+    background-color: #1d1d1d;
   }
 
   main {
@@ -54,7 +57,17 @@
   }
 
   textarea {
+    color: #fff;
     font-size: large;
+    white-space: nowrap;
+    background-color: #353b45;
+    border: 2px transparent;
+    padding: 5px;
+  }
+
+  textarea:focus {
+    /* border: 2px solid #264437; */
+    box-shadow: 0 0 10px #42b983;
   }
 
   button {
@@ -70,6 +83,10 @@
     border-radius: 3px;
     box-sizing: border-box;
     cursor: pointer;
-    transition: background-color .15s ease,color .15s ease;
+    transition: background-color .3s ease,color .3s ease;
+  }
+
+  button:hover {
+    background-color: #4752c4;
   }
 </style>
