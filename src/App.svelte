@@ -2,10 +2,13 @@
   import { createPopup } from '@picmo/popup-picker';
   import { onMount } from 'svelte';
 
-  let movies = "ian test";
+  const workerUrl = 'https://movies.ikottman.workers.dev/';
+
+  let movies = "";
   let picker;
-  // TODO: pull out emoji picker to a separate component, will need to pass down the text area element
   onMount(async() => {
+    // get current state from cloudlfare KV
+    await fetch(workerUrl).then((response) => response.text()).then(text => movies = text);
     const triggerButton = document.getElementById('emoji') as HTMLElement;
     picker = createPopup({
       showVariants: false,
@@ -31,9 +34,12 @@
     }
   }
 
-  function save() {
+  async function save() {
     const updatedMovies = document.getElementById('movies').value;
-    console.log(updatedMovies);
+    await fetch(workerUrl, {
+      method: 'POST',
+      body: updatedMovies
+    });
   }
 </script>
 
@@ -59,7 +65,7 @@
   textarea {
     color: #fff;
     font-size: large;
-    white-space: nowrap;
+    white-space: pre-wrap;
     background-color: #353b45;
     border: 2px transparent;
     padding: 5px;
